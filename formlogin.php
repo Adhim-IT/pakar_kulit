@@ -10,6 +10,14 @@ include "ceklogin.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign in</title>
     <link rel="stylesheet" href="style1.css" />
+    <style>
+    .error-message {
+        color: white;
+        width: 80%;
+        background-color: red;
+        /* Sesuaikan dengan kebutuhan margin */
+    }
+    </style>
 </head>
 
 <body>
@@ -22,11 +30,18 @@ include "ceklogin.php";
                             <img src="logo.png" alt="Dokterpedia." />
                             <h4>Dokterpedia.</h4>
                         </div>
-
                         <div class="heading">
                             <h2>Welcome</h2>
                             <h6>Not registered yet?</h6>
                             <a href="formregister.php" class="toggle">Sign up</a>
+                        </div>
+                        <div class="error-message">
+                            <?php
+                            if (isset($_SESSION['errorMessage'])) {
+                             echo $_SESSION['errorMessage'];
+                             unset($_SESSION['errorMessage']); // Hapus pesan kesalahan setelah ditampilkan
+                            }
+                            ?>
                         </div>
                         <div class="actual-form">
                             <div class="input-wrap">
