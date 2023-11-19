@@ -14,6 +14,8 @@ $level = isset($_SESSION['LOG_LEVEL']) ? $_SESSION['LOG_LEVEL'] : "";
             class="fa fa-users"></i> <span>User</span></a></li>
 <li <?php if ($page == "riwayat" || $page == "update_riwayat") echo 'class="active"'; ?>><a href="?page=riwayat"><i
             class="fa fa-history"></i> <span>Riwayat Diagnosa</span></a></li>
+<li <?php if ($page == "diagram" || $page == "diagram") echo 'class="active"'; ?>><a href="?page=diagram"><i
+            class="fa fa-table"></i> <span>Diagram</span></a></li>
 
 <?php } elseif ($level == "Dokter") { ?>
 <li <?php if ($page == "gejala" || $page == "update_gejala") echo 'class="active"'; ?>><a href="?page=gejala"><i
@@ -26,6 +28,7 @@ $level = isset($_SESSION['LOG_LEVEL']) ? $_SESSION['LOG_LEVEL'] : "";
             class="fa fa-history"></i> <span>Riwayat Diagnosa</span></a></li>
 
 <?php } elseif ($level == "User") { ?>
+
 <li <?php if ($page == "konsultasi") echo 'class="active"'; ?>><a href="?page=konsultasi"><i class="fa fa-check"></i>
         <span>Konsultasi</span></a></li>
 <li <?php if ($page == "riwayat" || $page == "update_riwayat") echo 'class="active"'; ?>><a href="?page=riwayat"><i
