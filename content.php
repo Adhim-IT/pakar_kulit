@@ -47,11 +47,13 @@ switch($page){
 		break;
 	case 'update_rule':
 		include "rule_update.php";
-		break;
+		break;	
 	case 'password':
 		include "password.php";
 		break;
-
+	case 'diagram':
+		include "diagram.php";
+		break;	
 	default:
 		include "beranda.php";
 		break;
