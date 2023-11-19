@@ -6,31 +6,39 @@ $dbName = "spforward2";
 
 $conn = mysqli_connect($serverName, $username, $password, $dbName);
 
-$errorMessage = ""; // Initialize the error message variable
+$errorMessage = ""; // Inisialisasi variabel pesan kesalahan
 
 if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'];
-
-    // Pastikan password dan konfirmasi password cocok
-    if ($password !== $confirmPassword) {
-        $_SESSION['errorMessage'] = 'Password and Confirm Password do not match';
-    }
-
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
 
-    if (empty($errorMessage)) { // Jika tidak ada kesalahan, masukkan data pengguna ke dalam database
-        $passwordEncrypted = mysqli_real_escape_string($conn, $password); // Hindari SQL Injection dengan menghindari escaping
+    // Validasi apakah username sudah ada
+    $checkUsernameQuery = "SELECT * FROM pengguna WHERE username = '$username'";
+    $resultUsername = mysqli_query($conn, $checkUsernameQuery);
 
-        $insertUser = "INSERT INTO pengguna (username, email, password, nama_lengkap) VALUES('$username','$email','$passwordEncrypted','$nama_lengkap')";
-        mysqli_query($conn, $insertUser);
-        header('location: formlogin.php');
+    if (mysqli_num_rows($resultUsername) > 0) {
+        $_SESSION['errorMessage'] = 'Username sudah digunakan.';
+    } else {
+        // Validasi apakah email sudah ada
+        $checkEmailQuery = "SELECT * FROM pengguna WHERE email = '$email'";
+        $resultEmail = mysqli_query($conn, $checkEmailQuery);
+
+        if (mysqli_num_rows($resultEmail) > 0) {
+            $_SESSION['errorMessage'] = 'Email sudah digunakan.';
+        } else {
+            if (empty($errorMessage)) { // Jika tidak ada kesalahan, masukkan data pengguna ke dalam database
+                $passwordEncrypted = mysqli_real_escape_string($conn, $password); // Hindari SQL Injection dengan menggunakan escaping
+
+                // Tetapkan level default ke 'user'
+                $insertUser = "INSERT INTO pengguna (username, email, password, nama_lengkap, level) VALUES ('$username','$email','$passwordEncrypted','$nama_lengkap','user')";
+                mysqli_query($conn, $insertUser);
+                header('location: formlogin.php');
+            }
+        }
     }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +49,14 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
     <link rel="stylesheet" href="style1.css" />
+    <style>
+    .error-message {
+        color: white;
+        width: 90%;
+        background-color: red;
+        /* Sesuaikan dengan kebutuhan margin */
+    }
+    </style>
 </head>
 
 <body>
@@ -53,12 +69,20 @@ if (isset($_POST['submit'])) {
                             <img src="logo.png" alt="Dokterpedia." />
                             <h4>Dokterpedia.</h4>
                         </div>
-
                         <div class="heading">
                             <h2>Get Started</h2>
                             <h6>Already have an account?</h6>
                             <a href="formlogin.php" class="toggle">Sign in</a>
                         </div>
+                        <div class="error-message">
+                            <?php
+                           if (isset($_SESSION['errorMessage'])) {
+                             echo $_SESSION['errorMessage'];
+                             unset($_SESSION['errorMessage']); // Hapus pesan kesalahan setelah ditampilkan
+                           }         
+                             ?>
+                        </div>
+                        <br>
                         <div class="input-wrap">
                             <input type="text" name="nama_lengkap" class="input-field" autocomplete="off" required />
                             <label>Full Name</label>
@@ -69,23 +93,15 @@ if (isset($_POST['submit'])) {
                                     required />
                                 <label>Name</label>
                             </div>
-
                             <div class="input-wrap">
                                 <input type="email" name="email" class="input-field" autocomplete="off" required />
                                 <label>Email</label>
                             </div>
-
                             <div class="input-wrap">
                                 <input type="password" name="password" minlength="4" class="input-field"
                                     autocomplete="off" required />
                                 <label>Password</label>
                             </div>
-                            <div class="input-wrap">
-                                <input type="password" name="confirm_password" minlength="4" class="input-field"
-                                    autocomplete="off" required />
-                                <label> Confirm Password</label>
-                            </div>
-
                             <input type="submit" name="submit" value="Sign Up" class="sign-btn" />
                         </div>
                     </form>
