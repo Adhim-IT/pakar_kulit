@@ -64,9 +64,6 @@ require_once "koneksi.php";
                         <span>Akurat</span>
                         <span>gratis</span>
                     </p>
-                    <p>Cukup satu langkah dengan menekan tombol di
-                        bawah ini anda sudah dapat mengetahui masalah
-                        yang ada pada kulit anda.</p>
                 </div>
 
             </div>
